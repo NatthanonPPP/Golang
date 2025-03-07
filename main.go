@@ -10,5 +10,4 @@ func main() {
 	id := uuid.New()
 	fmt.Println("Hello, world!2")
 	fmt.Println("id :", id)
-	phim.HelloPhim()
 }
