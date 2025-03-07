@@ -1,8 +1,5 @@
 module github.com/NatthanonPPP/Golang
 
-<<<<<<< HEAD
-go 1.23.5
-=======
 go 1.23.6
 
 require (
@@ -19,4 +16,3 @@ require (
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 )
->>>>>>> 43052c5 (Initial commit)
