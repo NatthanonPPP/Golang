@@ -1,33 +1,11 @@
 package main
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
-
-type Book struct {
-	ID     int    `json:"id"`
-	Title  string `json:"title"`
-	Author string `json:"author"`
-}
-
-var books []Book
-
-func main() {
-	app := fiber.New()
-
-	books = append(books, Book{ID: 1, Title: "Water", Author: "Phim"})
-	books = append(books, Book{ID: 2, Title: "Drink", Author: "POP"})
-
-	app.Get("/books", getBooks)
-	app.Get("/books/:id", getBook)
-	app.Post("/books", createBook)
-	app.Put("/books/:id", updateBook)
-	app.Delete("/books/:id", deleteBook)
-
-	app.Listen(":8080")
-}
 
 func getBooks(c *fiber.Ctx) error {
 	return c.JSON(books)
@@ -86,4 +64,32 @@ func deleteBook(c *fiber.Ctx) error {
 		}
 	}
 	return c.SendStatus(fiber.StatusNotFound)
+}
+
+func uploadFile(c *fiber.Ctx) error {
+	file, err := c.FormFile("image")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
+	}
+	err = c.SaveFile(file, "./uploads/"+file.Filename)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
+	}
+	return c.SendString("File upload completed.")
+}
+
+func testHTML(c *fiber.Ctx) error {
+	return c.Render("index", fiber.Map{
+		"Title": "Hello, Go!",
+	})
+}
+
+func getEnv(c *fiber.Ctx) error {
+	secret := os.Getenv("SECRET")
+	if secret == "" {
+		secret = "defaultsecret"
+	}
+	return c.JSON(fiber.Map{
+		"SECRET": secret,
+	})
 }
