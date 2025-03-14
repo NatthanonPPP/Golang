@@ -1,12 +1,21 @@
 package main
 
 import (
-	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
 
+// Handler functions
+// getBooks godoc
+// @Summary Get all books
+// @Description Get details of all books
+// @Tags books
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Success 200 {array} Book
+// @Router /books [get]
 func getBooks(c *fiber.Ctx) error {
 	return c.JSON(books)
 }
@@ -64,32 +73,4 @@ func deleteBook(c *fiber.Ctx) error {
 		}
 	}
 	return c.SendStatus(fiber.StatusNotFound)
-}
-
-func uploadFile(c *fiber.Ctx) error {
-	file, err := c.FormFile("image")
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
-	}
-	err = c.SaveFile(file, "./uploads/"+file.Filename)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
-	}
-	return c.SendString("File upload completed.")
-}
-
-func testHTML(c *fiber.Ctx) error {
-	return c.Render("index", fiber.Map{
-		"Title": "Hello, Go!",
-	})
-}
-
-func getEnv(c *fiber.Ctx) error {
-	secret := os.Getenv("SECRET")
-	if secret == "" {
-		secret = "defaultsecret"
-	}
-	return c.JSON(fiber.Map{
-		"SECRET": secret,
-	})
 }
