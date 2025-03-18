@@ -36,6 +36,8 @@ func main() {
 
 	db = sdb
 
+	defer db.Close()
+
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
