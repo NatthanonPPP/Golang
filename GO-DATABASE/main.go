@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 )
 
@@ -19,9 +20,9 @@ const (
 var db *sql.DB
 
 type Product struct {
-	ID    int
-	Name  string
-	Price int
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Price int    `json:"price"`
 }
 
 func main() {
@@ -43,9 +44,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Connect Database Successful.")
+	app := fiber.New()
 
-	// err = createProduct(&Product{Name: "Go product 2", Price: 444})
+	app.Get("/product/:id", getProductHandler)
+
+	app.Listen(":8080")
+
+	// fmt.Println("Connect Database Successful.")
+
+	// err = createProduct(&Product{Name: "PPP", Price: 200})
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
@@ -54,7 +61,7 @@ func main() {
 	// product, err := getProduct(2)
 	// fmt.Println("Get Successful.", product)
 
-	// product, err := updateProduct(2, &Product{Name: "UUU", Price: 333})
+	// product, err := updateProduct(2, &Product{Name: "ooPP", Price: 200})
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
@@ -66,9 +73,13 @@ func main() {
 	// }
 	// fmt.Println("Delete Product Successful.")
 
-	products, err := getProducts()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(products)
+	// products, err := getProducts()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(products)
+}
+
+func getProductHandler(c *fiber.Ctx) error {
+	return c.SendString("")
 }
