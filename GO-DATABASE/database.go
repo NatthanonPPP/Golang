@@ -55,6 +55,7 @@ func updateProduct(id int, product *Product) (Product, error) {
 		product.Price,
 		id,
 	)
+
 	err := row.Scan(&p.ID, &p.Name, &p.Price)
 	if err != nil {
 		return Product{}, err

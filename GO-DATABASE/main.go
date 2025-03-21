@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
@@ -46,7 +47,11 @@ func main() {
 
 	app := fiber.New()
 
+	app.Get("/product", getProductsHandler)
 	app.Get("/product/:id", getProductHandler)
+	app.Post("/product", createProductHandler)
+	app.Put("/product/:id", updateProductHandler)
+	app.Delete("/product/:id", deleteProductHandler)
 
 	app.Listen(":8080")
 
@@ -80,6 +85,72 @@ func main() {
 	// fmt.Println(products)
 }
 
+func getProductsHandler(c *fiber.Ctx) error {
+	products, err := getProducts()
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	return c.JSON(products)
+}
+
 func getProductHandler(c *fiber.Ctx) error {
-	return c.SendString("")
+	productId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	product, err := getProduct(productId)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	return c.JSON(product)
+}
+
+func createProductHandler(c *fiber.Ctx) error {
+	p := new(Product)
+	if err := c.BodyParser(p); err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	err := createProduct(p)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	return c.JSON(p)
+}
+
+func updateProductHandler(c *fiber.Ctx) error {
+	productId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	p := new(Product)
+	if err := c.BodyParser(p); err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	product, err := updateProduct(productId, p)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	return c.JSON(product)
+}
+
+func deleteProductHandler(c *fiber.Ctx) error {
+	productId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	err = deleteProduct(productId)
+	if err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+
+	return c.SendStatus(fiber.StatusNoContent)
 }
