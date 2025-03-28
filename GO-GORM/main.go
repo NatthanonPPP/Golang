@@ -40,8 +40,17 @@ func main() {
 		panic("failed to connect to database")
 	}
 
-	fmt.Println(db)
 	fmt.Println("Connect successful.")
 
 	db.AutoMigrate(&Book{})
+	fmt.Println("Migrate successful")
+
+	newBook := &Book{
+		Name:        "Phim",
+		Author:      "PPP",
+		Description: "TEST",
+		Price:       200,
+	}
+
+	createBook(db, newBook)
 }
