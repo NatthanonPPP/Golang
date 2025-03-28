@@ -22,5 +22,4 @@ func createBook(db *gorm.DB, book *Book) {
 	}
 
 	fmt.Println("Create Book Successful")
-	fmt.Println("eiei")
 }
