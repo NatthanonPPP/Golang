@@ -45,12 +45,26 @@ func main() {
 	db.AutoMigrate(&Book{})
 	fmt.Println("Migrate successful")
 
-	newBook := &Book{
-		Name:        "Phim",
-		Author:      "PPP",
-		Description: "TEST",
-		Price:       200,
-	}
+	// Create
+	// newBook := &Book{
+	// 	Name:        "Phim",
+	// 	Author:      "PPP",
+	// 	Description: "TEST",
+	// 	Price:       200,
+	// }
+	// createBook(db, newBook)
 
-	createBook(db, newBook)
+	// Get
+	// currentBook := getBook(db, 2)
+	// fmt.Println(currentBook)
+
+	// Update
+	// currentBook := getBook(db, 2)
+	// currentBook.Name = "oeoe"
+	// currentBook.Price = 212121
+	// updateBook(db, currentBook)
+	// fmt.Println(currentBook)
+
+	// Delete
+	// deleteBook(db, 1)
 }
